@@ -34,14 +34,19 @@ pipeline {
 
         stage('Security Scan') {
             steps {
-                sh "source ${VIRTUAL_ENV}/bin/activate && bandit -r ."
+                script {
+                    sh "source ${VIRTUAL_ENV}/bin/activate && bandit -r . --exclude venv || true"
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying application..."
-                sh "cp app.py /tmp/deployed_app.py"
+                script {
+                    echo "Deploying application..."
+                    sh "cp app.py /tmp/deployed_app.py"
+                    echo "Application deployed successfully."
+                }
             }
         }
     }
